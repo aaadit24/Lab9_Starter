@@ -88,6 +88,15 @@
   </main>
 
   <script>
+    class CustomError extends Error {
+        constructor(message) {
+        super(message);
+        this.name = 'CustomError';
+    }
+    }
+    window.onerror = function (message, source, lineno, colno, error) {
+    console.error('Global Error:', message);
+    };
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,10 +104,106 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+        throw new Error('Invalid input. Please enter numbers.');
+        throw new CustomError('This is a custom error too');
+        }
+
+        let result = eval(`${firstNum} ${operator} ${secondNum}`);
+
+        output.innerHTML = result;
+    } catch (error) {
+        console.error(error.message);
+    } finally {
+        console.log('Done');
+    }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+
+    // Console Log Demo
+    errorBtns[0].addEventListener('click', () => {
+    console.log('Console Log Demo');
+    });
+
+    // Console Error Demo
+    errorBtns[1].addEventListener('click', () => {
+    console.error('Console Error Demo.');
+    });
+
+    // Console Count
+    let count = 0;
+    errorBtns[2].addEventListener('click', () => {
+    count++;
+    console.count('Count Button:', count);
+    });
+
+    // Console Warn
+    errorBtns[3].addEventListener('click', () => {
+    console.warn('Console Warn');
+    });
+
+    // Console Assert
+    errorBtns[4].addEventListener('click', () => {
+    console.assert(false, 'Assertion failed.');
+    });
+
+    // Console Clear
+    errorBtns[5].addEventListener('click', () => {
+    console.clear();
+    });
+
+    // Console Dir
+    errorBtns[6].addEventListener('click', () => {
+    console.dir(document);
+    });
+
+    // Console dirxml
+    errorBtns[7].addEventListener('click', () => {
+    console.dirxml(document);
+    });
+
+    // Console Group Start
+    errorBtns[8].addEventListener('click', () => {
+    console.group('');
+    console.log('inside');
+    });
+
+    // Console Group End
+    errorBtns[9].addEventListener('click', () => {
+    console.log('outside');
+    console.groupEnd();
+    });
+
+    // Console Table
+    errorBtns[10].addEventListener('click', () => {
+    console.table([{ name: 'a', age: 1 }, { name: 'b', age: 2 }]);
+    });
+
+    // Start Timer
+    errorBtns[11].addEventListener('click', () => {
+    console.time('Timer');
+    });
+
+    // End Timer
+    errorBtns[12].addEventListener('click', () => {
+    console.timeEnd('Timer');
+    });
+
+    // Console Trace
+    errorBtns[13].addEventListener('click', () => {
+    console.trace('Trace this');
+    });
+
+    // Trigger a Global Error
+    errorBtns[14].addEventListener('click', () => {
+    nonExistentFunction();
+    });
+    errorBtns[15].addEventListener('click', () => {
+    globaleoor();
+    });
+
 
     // Start your code here
     // You may move this JS to another file if you wish
